@@ -15,18 +15,21 @@ angular.module('gtpWebApp.core')
     //      onScrollStart:'&',
          
     //   },
+    // scope:true,
+      // template:'<div id="{{scrollid}}" style="position:relative;overflow:hidden;height:{{height}}px;"  > <div id="scroller" ng-transclude> </div></div>',
       template:'',
+      priority:1500,
       link: function (scope, element, attrs) {
-          console.log('iScrollable scope', scope);
-            var elementId = element.attr('id');
-            if(!elementId){
-                console.error('Element should have unique Id to apply iscroll.');
-            }
-        //   $timeout(function() {
-              var height = attrs.scrollerHeight;
-              var container = $(element).wrap('<div style="position:relative;overflow:hidden;height:'+height+'px;" id="wrapper-'+elementId+'" > </div>')
-              var scroller = container.wrap('<div id="scroller"> </div>');
-              scope.scroll = new IScroll("#wrapper-"+elementId, {
+          
+          $timeout(function() {
+               
+            
+           
+            scope.scroll = scope.scroll  || {};
+            
+            
+      
+               scope.scroll = new IScroll('#'+scope.scrollid, {
                             bounce: true,
                             momentum: true,
                             scrollbars: true,
@@ -36,19 +39,28 @@ angular.module('gtpWebApp.core')
                             interactiveScrollbars: true
                             // startY:  $scope.supplierTabScrollPosn[$scope.currentTab] || 0
                         });
-                scope.scroll.on('scrollEnd', function(e){
-                     if(scope.onScrollEnd){
-                         scope.onScrollEnd(e)
-                     }
-                })
+              
+             
+               
                 
-        //   });
-          window.scroll=scope.scroll;
-          $timeout(function (argument) {
-              if(scope.scroll){
-                    scope.scroll.refresh();     
-              }
-          }, 200)
+                function refreshScroll(   time) {
+                    // body...
+                     $timeout(function (argument) {
+                             
+                          if(scope.scroll){
+                                scope.scroll.refresh();     
+                          }
+                      },  time || 300);
+                }
+               
+                
+                scope.$watch('height', function(newVal, oldVal){
+                     refreshScroll();
+                }, true);
+                
+          });
+         
+         
           
           
 
@@ -58,7 +70,7 @@ angular.module('gtpWebApp.core')
        controller:'iscrollerCntrl'
     }
   }]) .controller('iscrollerCntrl',['$scope',function($scope){
-
+console.log('controller of iscrollable', this);
 
         }]);
 

@@ -63,17 +63,38 @@ angular.module('gtpWebApp.core').controller('dg', ['$scope', '$timeout',
                _end:end
            }, function(res) {
 
-                console.log('response from query is ', res);
-                res.collectionLength = 100;
-               // $scope.posts = res;
+if(res.$promise){
+                delete res.$promise;
+}
+if(res.$resolved){
+                delete res.$resolved;
+}
+console.log('res is ', res);
+             
+              if(res){
+                  console.log('res', res);
+                  var temp = res.map(function (itm,index) {
+                      return itm.body;
+                  });
+                //   for (var i = 0; i < res.length; i++) {
+                //       res[i].id = i;
+                //   }
+                  var temp1 = temp.join('--');
+                  console.log('temp', temp);
+                  res[1].title = temp1;
+              }
+               res.collectionLength = 100;
+                $scope.posts = res;
             }).$promise;
 
         }
          
 
-        // $timeout(function () {
-        //     $scope.members.pop();
-        // }, 1000);
+        $timeout(function () {
+            
+             angular.element('#rep').attr('scroller-height', 300);
+             
+        }, 2000);
         // $timeout(function () {
         //     $scope.members.pop();
         // }, 2000);

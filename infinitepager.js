@@ -11,27 +11,31 @@ angular.module('gtpWebApp.core')
                     // scope.repeatExpression = controller.repeatExpression.replace(' in ', ' in filtered = ( ');
                     // scope.repeatExpression += ') | myLimitTo:dgEnd:dgStart';
                     
-                    scope.repeatExpression = controller.repeatExpression.replace(controller.repeatAttrs.rhs, ' filtered = (' + controller.repeatAttrs.rhs + ') | myLimitTo:dgEnd:dgStart ')
+                    scope.repeatExpression = controller.repeatExpression.replace(controller.repeatAttrs.rhs, ' filtered = (' + controller.repeatAttrs.rhs
+                    + ') | myLimitTo:dgEnd:dgStart ');
+                    
+                  
                     
                     scope.onIndexChanged = $parse(controller.onIndexChanged);
                     $timeout(function() {
-                        console.log('scope.repeatAttrs', scope.collectionLength);
+                        
                     })
                     scope.pagingMode = attrs.pagingMode;
-console.log('infinitepager scope', scope);
+
                     scope.paging = new pagingService(controller.pagingUniqueKey);
                     scope.collection = $parse(controller.repeatAttrs.rhs)(scope);
                     if (scope.collection) {
                         scope.collectionLength = scope.collection.length;
                         scope.paging.setCollectionLength(scope.collection.length);
                     }
-                    console.log('collectionLength', scope.collectionLength);
+                    
                     scope.$watchCollection(controller.repeatAttrs.rhs, function(collection) {
                         if (collection) {
-                         //   scope.collectionLength = collection.length;
-                         //   scope.paging.setCollectionLength(collection.length);
-                           
-                       } 
+                           // scope.paging.collectionLength = collection.length;
+                            if(scope.pagingMode != 'server'){
+                                scope.paging.setCollectionLength(collection.length);
+                            }
+                       }
                     });
                     scope.block = controller.block;
                     scope.unBlock = controller.unBlock;
@@ -46,12 +50,12 @@ console.log('infinitepager scope', scope);
                 },
             },
             controller: ['$scope', function($scope) {
-                console.log('infinite Pager controller--> $scope', $scope);
+                //console.log('infinite Pager controller--> $scope', $scope);
 
                 $scope.onCurrentPageChanged = function(eventWrapper) {
                 var event = eventWrapper.event || eventWrapper;
-                    console.log('$scope.paging.currentPage', $scope.paging.currentPage);
-                    console.log('info onCurrentPageChanged received--> $currentPage', event);
+                    //console.log('$scope.paging.currentPage', $scope.paging.currentPage);
+                    //console.log('info onCurrentPageChanged received--> $currentPage', event);
                     //$scope.dgEnd += 1; //$scope.paging.pageSize;
                     // if (!$scope.$$phase) $scope.$apply();
 
@@ -71,11 +75,13 @@ console.log('infinitepager scope', scope);
                             break;
                         case 'server':
                             $scope.block();
+                            
                             if($scope.onIndexChanged){
-                                $scope.onIndexChanged( $scope, {event:event}).then(function (res) {
-                                    $scope.paging.collectionLength = res.collectionLength;
-                                    delete res.collectionLength;
-                                    $scope.collection = res;
+                                $scope.onIndexChanged( $scope, {event:event})
+                                .then(function (res) {
+                                    $scope.paging.collectionLength =  res.collectionLength;//res.length;
+                                    $scope.dgEnd = res.collectionLength;
+                                    $scope.dgStart = 0;
                                      $scope.unBlock();
                                 });
                                  
@@ -92,7 +98,7 @@ console.log('infinitepager scope', scope);
                 }
 
                 $scope.onPageSizeChanged = function(pageSize) {
-                    console.log('$scope.paging.pageSize', $scope.paging.pageSize);
+                    
                     
                     $scope.dgStart = 0; //$scope.paging.pageSize;
                     $scope.dgEnd = $scope.paging.pageSize;
