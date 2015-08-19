@@ -92,7 +92,7 @@ console.log('res is ', res);
 
         $timeout(function () {
             
-             angular.element('#rep').attr('scroll-height', 400);
+             angular.element('#rep').attr('scroll-height', 90);
               if (!$scope.$$phase) $scope.$apply()
              
         }, 2000);

@@ -63,10 +63,10 @@ angular.module('gtpWebApp.core')
                       },  50);
                 
                }
-            scope.$watch(function() {return element; }, function (val) {
+            scope.$watch(function() {return element.attr('scroll-height'); }, function (val) {
               // body...
               debugger;
-              angular.element('#'+scrollerKey).height(val.attr('scroll-height'));
+              angular.element('#'+scrollerKey).height(val);
                 refreshScroll(scrollerKey);
                
             })
