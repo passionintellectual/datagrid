@@ -1,5 +1,5 @@
  angular.module('gtpWebApp.core').factory( 'PostRepository', [ 'Resource', function( $resource ) {
-   return $resource( 'http://jsonplaceholder.typicode.com/posts/:id', { id: '@id' } );
+   return $resource( 'https://jsonplaceholder.typicode.com/posts/:id', { id: '@id' } );
  }]);
    
  
