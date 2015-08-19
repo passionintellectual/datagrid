@@ -89,13 +89,29 @@ console.log('res is ', res);
 
         }
          
-
-        $timeout(function () {
+function dot(){
+    // body...
+      $timeout(function   () {
             
-             angular.element('#rep').attr('scroll-height', 90);
-              if (!$scope.$$phase) $scope.$apply()
+            //  angular.element('#rep').attr('scroll-height', 90);
+            //   if (!$scope.$$phase) $scope.$apply()
+            $scope.refreshOuterScroll = !!!$scope.refreshOuterScroll;
+            //angular.element('#rep').attr('scroll-height', 90);
+             
+              dot();
              
         }, 2000);
+}
+      
+        dot();
+        $scope.outerScrollEnd = function(e){
+            console.log('outer scroll end', e);
+            
+        }
+          $scope.innerScrollEnd = function(e){
+            console.log('inner scroll end', e);
+            
+        }
         // $timeout(function () {
         //     $scope.members.pop();
         // }, 2000);

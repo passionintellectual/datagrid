@@ -50,9 +50,9 @@
             <datagrid id="posts" repeat="row in posts track by $index" on-index-changed="onCurrentPageChangedServer(event)">
                 <div style="background:blue;color:white;">
                  
-                        <itemtemplate  i-scrollable scroll-height="50"   id="rep" paging-mode="server">
+                        <itemtemplate  i-scrollable scroll-height="50" on-scroll-end="outerScrollEnd(e)" refresh-scroll="refreshOuterScroll"  id="rep" paging-mode="server">
                             
-                            <div   i-scrollable scroll-height="10" id="{{row.id}}"> -- POST{{row.id}} {{row.title}}</div>
+                            <div   i-scrollable scroll-height="10" id="{{row.id}}" on-scroll-end="innerScrollEnd(e)"> -- POST{{row.id}} {{row.title}}</div>
                             <hr style="width:500px;">
                          
                         </itemtemplate>

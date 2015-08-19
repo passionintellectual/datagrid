@@ -51,12 +51,25 @@ angular.module('gtpWebApp.core')
                             // startY:  $scope.supplierTabScrollPosn[$scope.currentTab] || 0
                         });
                         
+                        scope[scrollerKey].scroll.on('scrollEnd', function(e){
+                            var et = this;
+                            et.scrollerKey = scrollerKey;
+                              var data = {
+       e:et,
+       
+     };
+     
+                            if(attrs.onScrollEnd){
+                                $parse(attrs.onScrollEnd)(scope, data);
+                            }
+                        });
+                        
               }
                 
                function refreshScroll(scrollerKey) {
                  // body...
                      $timeout(function () {
-                            debugger;
+                             
                           if(scope[scrollerKey].scroll){
                                 scope[scrollerKey].scroll.refresh();     
                           }
@@ -65,14 +78,24 @@ angular.module('gtpWebApp.core')
                }
             scope.$watch(function() {return element.attr('scroll-height'); }, function (val) {
               // body...
-              debugger;
+              
               angular.element('#'+scrollerKey).height(val);
                 refreshScroll(scrollerKey);
                
             })
-                scope.$watch(scrollerKey+'.height', function(newVal, oldVal){
-                     refreshScroll(scrollerKey);
-                }, true);
+            
+            scope.$watch(attrs.refreshScroll, function (val) {
+              // body...
+              if(val){
+              angular.element('#'+scrollerKey).height(9);    
+              }else{
+                  angular.element('#'+scrollerKey).height(90);
+              }
+              
+                refreshScroll(scrollerKey);
+               
+            })
+             
                 
           });
          
