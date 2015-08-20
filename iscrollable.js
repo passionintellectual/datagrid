@@ -77,7 +77,7 @@ angular.module('gtpWebApp.core')
                 
                }
             scope.$watch(function() {return element.attr('scroll-height'); }, function (val) {
-              // body...
+              
               
               angular.element('#'+scrollerKey).height(val);
                 refreshScroll(scrollerKey);
@@ -87,9 +87,9 @@ angular.module('gtpWebApp.core')
             scope.$watch(attrs.refreshScroll, function (val) {
               // body...
               if(val){
-              angular.element('#'+scrollerKey).height(9);    
+                    angular.element('#'+scrollerKey).height(9);    
               }else{
-                  angular.element('#'+scrollerKey).height(90);
+                 angular.element('#'+scrollerKey).height(90);
               }
               
                 refreshScroll(scrollerKey);

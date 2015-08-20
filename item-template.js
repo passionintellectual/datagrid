@@ -13,6 +13,7 @@ angular.module('gtpWebApp.core')
                     tempElement.attr('infinitepager','');
                     tempElement.attr('paging-mode', attrs.pagingMode || 'infinite');
                     
+                    scope.onCompleteRender = $parse(controller.onCompleteRender);
                     console.log('itemtemplate scope', scope);
                 
                     $compile(tempElement)(scope);
@@ -25,6 +26,9 @@ angular.module('gtpWebApp.core')
                     $(element).html('<div class="ngRContent"></div>');
                     var tempElement = $(element).find('.ngRContent').first();
                     tempElement.attr('ng-repeat',expression);
+                    tempElement.attr('ng-repeat-events', '');
+                    tempElement.attr('oncompleterender', "onNgRepeatCompleteRendering()");
+                    
 
 
                     transclude(scope, function(clone) {
@@ -46,7 +50,16 @@ angular.module('gtpWebApp.core')
                 //post: function postLink(scope, iElement, iAttrs, controller) {  }
             },
             controller:['$scope',function($scope){
-
+                  $scope.onNgRepeatCompleteRendering = function(){
+                         $scope.refreshouter = true;
+                          if($scope.onCompleteRender){
+                              var data = {
+                                  e:$scope,
+                              };
+                              $scope.onCompleteRender($scope, data);
+                          }
+                         
+                    }
             }]
         }
     }]);

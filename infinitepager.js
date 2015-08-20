@@ -17,9 +17,7 @@ angular.module('gtpWebApp.core')
                   
                     
                     scope.onIndexChanged = $parse(controller.onIndexChanged);
-                    $timeout(function() {
-                        
-                    })
+                   
                     scope.pagingMode = attrs.pagingMode;
 
                     scope.paging = new pagingService(controller.pagingUniqueKey);

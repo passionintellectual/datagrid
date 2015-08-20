@@ -46,77 +46,122 @@ angular.module('gtpWebApp.core').controller('dg', ['$scope', '$timeout',
         }, ];
 
 
-//  PostRepository.query( function(res) {
+        //  PostRepository.query( function(res) {
 
-//                 console.log('response from query is ', res);
-//                 $scope.posts = res;
-//             });
-            console.log('outer scope' ,$scope);
-            $scope.servergridblocked = true;
+        //                 console.log('response from query is ', res);
+        //                 $scope.posts = res;
+        //             });
+        console.log('outer scope', $scope);
+        $scope.servergridblocked = true;
         $scope.onCurrentPageChangedServer = function(event) {
-           
+
             var start = event.newCurrentPage * event.pageSize;
             var end = start + event.pageSize;
-            
-           return  PostRepository.query({
-               _start:start,
-               _end:end
-           }, function(res) {
 
-if(res.$promise){
-                delete res.$promise;
-}
-if(res.$resolved){
-                delete res.$resolved;
-}
-console.log('res is ', res);
-             
-              if(res){
-                  console.log('res', res);
-                  var temp = res.map(function (itm,index) {
-                      return itm.body;
-                  });
-                //   for (var i = 0; i < res.length; i++) {
-                //       res[i].id = i;
-                //   }
-                  var temp1 = temp.join('--');
-                  console.log('temp', temp);
-                  res[1].title = temp1;
-              }
-               res.collectionLength = 100;
+            return PostRepository.query({
+                _start: start,
+                _end: end
+            }, function(res) {
+
+                if (res.$promise) {
+                    delete res.$promise;
+                }
+                if (res.$resolved) {
+                    delete res.$resolved;
+                }
+                console.log('res is ', res);
+
+                if (res) {
+                    console.log('res', res);
+                    var temp = res.map(function(itm, index) {
+                        return itm.body;
+                    });
+                    //   for (var i = 0; i < res.length; i++) {
+                    //       res[i].id = i;
+                    //   }
+                    var temp1 = temp.join('--');
+                    console.log('temp', temp);
+                    res[1].title = temp1;
+                }
+                res.collectionLength = 100;
                 $scope.posts = res;
             }).$promise;
 
         }
-         
-function dot(){
-    // body...
-      $timeout(function   () {
-            
-            //  angular.element('#rep').attr('scroll-height', 90);
-            //   if (!$scope.$$phase) $scope.$apply()
-            $scope.refreshOuterScroll = !!!$scope.refreshOuterScroll;
-            //angular.element('#rep').attr('scroll-height', 90);
-             
-              dot();
-             
-        }, 2000);
-}
-      
+
+
+
+   $scope.onCurrentPageChangedServer1 = function(event) {
+
+            var start = event.newCurrentPage * event.pageSize;
+            var end = start + event.pageSize;
+
+            return PostRepository.query({
+                _start: start,
+                _end: end
+            }, function(res) {
+
+                if (res.$promise) {
+                    delete res.$promise;
+                }
+                if (res.$resolved) {
+                    delete res.$resolved;
+                }
+                console.log('res is ', res);
+
+                if (res) {
+                    console.log('res', res);
+                    var temp = res.map(function(itm, index) {
+                        return itm.body;
+                    });
+                    //   for (var i = 0; i < res.length; i++) {
+                    //       res[i].id = i;
+                    //   }
+                    var temp1 = temp.join('--');
+                    console.log('temp', temp);
+                    res[1].title = temp1;
+                }
+                res.collectionLength = 100;
+                $scope.posts1 = res;
+            }).$promise;
+
+        }
+        function dot() {
+            // body...
+            $timeout(function() {
+
+                //  angular.element('#rep').attr('scroll-height', 90);
+                //   if (!$scope.$$phase) $scope.$apply()
+                $scope.refreshOuterScroll = !!!$scope.refreshOuterScroll;
+                //angular.element('#rep').attr('scroll-height', 90);
+
+                // dot();
+
+            }, 2000);
+        }
+
         dot();
-        $scope.outerScrollEnd = function(e){
+        $scope.ondatalistrenderfinished = function(e) {
+            console.log('rendering is finished.');
+
+        };
+        $scope.ondatalistrenderfinished1 = function(e) {
+            console.log('1 rendering is finished.');
+
+        };
+        $scope.outerScrollEnd = function(e) {
             console.log('outer scroll end', e);
-            
+
         }
-          $scope.innerScrollEnd = function(e){
-            console.log('inner scroll end', e);
-            
-        }
-        // $timeout(function () {
-        //     $scope.members.pop();
-        // }, 2000);
-        // $timeout(function () {
-        //     $scope.members.pop();
-        // }, 3000)
+        $scope.innerScrollEnd = function(e) {
+                console.log('inner scroll end', e);
+
+            }
+            // $timeout(function () {
+            //     $scope.members.pop();
+            // }, 2000);
+            // $timeout(function () {
+            //     $scope.members.pop();
+            // }, 3000)
     }
 ])

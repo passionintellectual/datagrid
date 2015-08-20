@@ -1,7 +1,7 @@
 angular.module('gtpWebApp.core')
     .directive('datagrid', ['$timeout', '$parse', '$compile', 'pagingService', 'guidService', function($timeout, $parse, $compile, pagingService, guidService) {
         return {
-            restrict: 'E',
+            restrict: 'EA',
             transclude: true,
              scope:true,
             template: '<div class="gridContainer {{gridClass}}"><element-spinner blocked="blocked"><div  class="content"  ><ng-transclude></ng-transclude></div></element-spinner> </div>',
@@ -12,7 +12,9 @@ angular.module('gtpWebApp.core')
                     if (attrs.onIndexChanged) {
                         controller.onIndexChanged =  attrs.onIndexChanged ;
                     }
-                     
+                    if (attrs.onCompleteRender) {
+                        controller.onCompleteRender =  attrs.onCompleteRender ;
+                    }
                     controller.repeatExpression = $(element).attr('repeat');
                     var repeatAttrs = checkExpression(controller.repeatExpression);
 
@@ -73,5 +75,7 @@ angular.module('gtpWebApp.core')
                 
              $scope.blocked = false;   
             }
+            
+          
             
     }]);
