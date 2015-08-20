@@ -51,9 +51,9 @@
             <datagrid id="posts" repeat="row in posts track by $index"  on-index-changed="onCurrentPageChangedServer(event)" on-complete-render="ondatalistrenderfinished(e)">
                 <div style="background:blue;color:white;">
                  
-                        <itemtemplate   i-scrollable scroll-height="50" on-scroll-end="outerScrollEnd(e)" id="rep" paging-mode="server">
+                        <itemtemplate   i-scrollable scroll-height="50"  on-scroll-end="outerScrollEnd(e)" scroller-key="rep" paging-mode="server">
                             
-                            <div   i-scrollable scroll-height="10" id="{{row.id}}"  refresh-scroll="refreshOuterScroll"  on-scroll-end="innerScrollEnd(e)"> -- POST{{row.id}} {{row.title}}</div>
+                            <div   i-scrollable scroll-height="10" scroller-key="{{row.id}}"  refresh-scroll="refreshOuterScroll"  on-scroll-end="innerScrollEnd(e)"> -- POST{{row.id}} {{row.title}}</div>
                             <hr style="width:500px;">
                          
                         </itemtemplate>
@@ -68,9 +68,9 @@
             <datagrid id="posts" repeat="row in posts1 track by $index"  on-index-changed="onCurrentPageChangedServer1(event)" on-complete-render="ondatalistrenderfinished1(e)">
                 <div style="background:blue;color:white;">
                  
-                        <itemtemplate   i-scrollable scroll-height="50" on-scroll-end="outerScrollEnd(e)" id="rep" paging-mode="server">
+                        <itemtemplate   i-scrollable scroll-height="50" on-scroll-end="outerScrollEnd(e)" scroller-key="rep1" paging-mode="server">
                             
-                            <div   i-scrollable scroll-height="10" id="{{row.id}}"  refresh-scroll="refreshOuterScroll"  on-scroll-end="innerScrollEnd(e)"> -- POST{{row.id}} {{row.title}}</div>
+                            <div   i-scrollable scroll-height="10" scroller-key="{{row.id}}1"  refresh-scroll="refreshOuterScroll"  on-scroll-end="innerScrollEnd(e)"> -- POST{{row.id}} {{row.title}}</div>
                             <hr style="width:500px;">
                          
                         </itemtemplate>

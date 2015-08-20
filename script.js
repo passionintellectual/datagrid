@@ -89,9 +89,7 @@ angular.module('gtpWebApp.core').controller('dg', ['$scope', '$timeout',
 
         }
 
-
-
-   $scope.onCurrentPageChangedServer1 = function(event) {
+$scope.onCurrentPageChangedServer1 = function(event) {
 
             var start = event.newCurrentPage * event.pageSize;
             var end = start + event.pageSize;
@@ -126,6 +124,7 @@ angular.module('gtpWebApp.core').controller('dg', ['$scope', '$timeout',
             }).$promise;
 
         }
+        
         function dot() {
             // body...
             $timeout(function() {
@@ -141,21 +140,11 @@ angular.module('gtpWebApp.core').controller('dg', ['$scope', '$timeout',
         }
 
         dot();
-        $scope.ondatalistrenderfinished = function(e) {
-            console.log('rendering is finished.');
-
-        };
-        $scope.ondatalistrenderfinished1 = function(e) {
-            console.log('1 rendering is finished.');
-
-        };
         $scope.outerScrollEnd = function(e) {
             console.log('outer scroll end', e);
-
         }
         $scope.innerScrollEnd = function(e) {
                 console.log('inner scroll end', e);
-
             }
             // $timeout(function () {
             //     $scope.members.pop();

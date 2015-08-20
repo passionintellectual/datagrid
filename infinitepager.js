@@ -7,17 +7,16 @@ angular.module('gtpWebApp.core')
             template: '',
             link: {
                 pre: function preLink(scope, element, attrs, controller, transclude) {
-                    
+
                     // scope.repeatExpression = controller.repeatExpression.replace(' in ', ' in filtered = ( ');
                     // scope.repeatExpression += ') | myLimitTo:dgEnd:dgStart';
-                    
-                    scope.repeatExpression = controller.repeatExpression.replace(controller.repeatAttrs.rhs, ' filtered = (' + controller.repeatAttrs.rhs
-                    + ') | myLimitTo:dgEnd:dgStart ');
-                    
-                  
-                    
+
+                    scope.repeatExpression = controller.repeatExpression.replace(controller.repeatAttrs.rhs, ' filtered = (' + controller.repeatAttrs.rhs + ') | myLimitTo:dgEnd:dgStart ');
+
+
+
                     scope.onIndexChanged = $parse(controller.onIndexChanged);
-                   
+
                     scope.pagingMode = attrs.pagingMode;
 
                     scope.paging = new pagingService(controller.pagingUniqueKey);
@@ -26,14 +25,14 @@ angular.module('gtpWebApp.core')
                         scope.collectionLength = scope.collection.length;
                         scope.paging.setCollectionLength(scope.collection.length);
                     }
-                    
+
                     scope.$watchCollection(controller.repeatAttrs.rhs, function(collection) {
                         if (collection) {
-                           // scope.paging.collectionLength = collection.length;
-                            if(scope.pagingMode != 'server'){
+                            // scope.paging.collectionLength = collection.length;
+                            if (scope.pagingMode != 'server') {
                                 scope.paging.setCollectionLength(collection.length);
                             }
-                       }
+                        }
                     });
                     scope.block = controller.block;
                     scope.unBlock = controller.unBlock;
@@ -51,19 +50,19 @@ angular.module('gtpWebApp.core')
                 //console.log('infinite Pager controller--> $scope', $scope);
 
                 $scope.onCurrentPageChanged = function(eventWrapper) {
-                var event = eventWrapper.event || eventWrapper;
+                    var event = eventWrapper.event || eventWrapper;
                     //console.log('$scope.paging.currentPage', $scope.paging.currentPage);
                     //console.log('info onCurrentPageChanged received--> $currentPage', event);
                     //$scope.dgEnd += 1; //$scope.paging.pageSize;
                     // if (!$scope.$$phase) $scope.$apply();
 
- 
+
                     switch ($scope.pagingMode) {
                         case 'normal':
                             if ($scope.collectionLength > event.extent.start) {
                                 $scope.dgStart = event.extent.start;
-                               
-                           
+
+
                             }
                             break;
                         case 'infinite':
@@ -73,16 +72,19 @@ angular.module('gtpWebApp.core')
                             break;
                         case 'server':
                             $scope.block();
-                            
-                            if($scope.onIndexChanged){
-                                $scope.onIndexChanged( $scope, {event:event})
-                                .then(function (res) {
-                                    $scope.paging.collectionLength =  res.collectionLength;//res.length;
-                                    $scope.dgEnd = res.collectionLength;
-                                    $scope.dgStart = 0;
-                                     $scope.unBlock();
+
+                            if ($scope.onIndexChanged) {
+                                var prms = $scope.onIndexChanged($scope, {
+                                    event: event
                                 });
-                                 
+                                if (prms && prms.then) {
+                                    prms.then(function(res) {
+                                        $scope.paging.collectionLength = res.collectionLength; //res.length;
+                                        $scope.dgEnd = res.collectionLength;
+                                        $scope.dgStart = 0;
+                                        $scope.unBlock();
+                                    });
+                                }
                             }
                             break;
 
@@ -96,8 +98,8 @@ angular.module('gtpWebApp.core')
                 }
 
                 $scope.onPageSizeChanged = function(pageSize) {
-                    
-                    
+
+
                     $scope.dgStart = 0; //$scope.paging.pageSize;
                     $scope.dgEnd = $scope.paging.pageSize;
                     // if (!$scope.$$phase) $scope.$apply();
