@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html>
 
-<head >
+<head>
     <!--<script data-require="jquery@*" data-semver="2.1.4" src="http://code.jquery.com/jquery-2.1.4.min.js"></script>-->
     <script type="text/javascript" src="jquery.min.js"></script>
     <!--<script data-require="angular.js@*" data-semver="2.0.0-alpha.31" src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.0/angular.js"></script>-->
-   <script type="text/javascript" src="angular.js"></script>
+    <script type="text/javascript" src="angular.js"></script>
     <script data-require="iscroll@*" data-semver="5.1.1" src="iscroll-probe.min.js"></script>
     <script data-require="angular-resource@*" data-semver="1.4.3" src="angular-resource.js"></script>
     <link rel="stylesheet" href="style.css" />
@@ -23,7 +23,9 @@
     <script src="data.js"></script>
     <script src="element-spinner.js"></script>
     <script src="iscrollable.js"></script>
+    <script type="text/javascript" src="testdirective.js"></script>
     <script type="text/javascript" src="ngrepeat-events.js"></script>
+    <script type="text/javascript" src="gq.js"></script>
 </head>
 
 <body ng-app="gtpWebApp.core">
@@ -47,43 +49,141 @@
 
         <hr>
 
-        <div> 
-            <datagrid id="posts" repeat="row in posts track by $index"  on-index-changed="onCurrentPageChangedServer(event)" on-complete-render="ondatalistrenderfinished(e)">
-                <div style="background:blue;color:white;">
-                 
-                        <itemtemplate   i-scrollable scroll-height="50"  on-scroll-end="outerScrollEnd(e)" scroller-key="rep" paging-mode="server">
-                            
-                            <div   i-scrollable scroll-height="10" scroller-key="{{row.id}}"  refresh-scroll="refreshOuterScroll"  on-scroll-end="innerScrollEnd(e)"> -- POST{{row.id}} {{row.title}}</div>
-                            <hr style="width:500px;">
-                         
-                        </itemtemplate>
-                  
-                   
-                </div>
-                <pagingcontrols page-size="10"></pagingcontrols>
-            </datagrid>
-        </div>
+        <!--<div> -->
+        <!--    <datagrid id="posts" repeat="row in posts track by $index"  on-index-changed="onCurrentPageChangedServer(event)" on-complete-render="ondatalistrenderfinished(e)">-->
+        <!--        <div style="background:lightgray;color:black;">-->
+        <!--          First Grid-->
+        <!--                <itemtemplate   i-scrollable scroll-height="50"  on-scroll-end="outerScrollEnd(e)" scroller-key="rep" paging-mode="server">-->
+
+        <!--                    <div   i-scrollable scroll-height="10" scroller-key="{{row.id}}"    on-scroll-end="innerScrollEnd(e)"> -- POST{{row.id}} {{row.title}}</div>-->
+        <!--                    <hr style="width:500px;">-->
+
+        <!--                </itemtemplate>-->
+
+
+        <!--        </div>-->
+        <!--        <pagingcontrols page-size="10"></pagingcontrols>-->
+        <!--    </datagrid>-->
+        <!--</div>-->
         <hr>
-        <div> 
-            <datagrid id="posts" repeat="row in posts1 track by $index"  on-index-changed="onCurrentPageChangedServer1(event)" on-complete-render="ondatalistrenderfinished1(e)">
-                <div style="background:blue;color:white;">
-                 
-                        <itemtemplate   i-scrollable scroll-height="50" on-scroll-end="outerScrollEnd(e)" scroller-key="rep1" paging-mode="server">
-                            
-                            <div   i-scrollable scroll-height="10" scroller-key="{{row.id}}1"  refresh-scroll="refreshOuterScroll"  on-scroll-end="innerScrollEnd(e)"> -- POST{{row.id}} {{row.title}}</div>
-                            <hr style="width:500px;">
-                         
-                        </itemtemplate>
-                  
-                   
-                </div>
-                <pagingcontrols page-size="10"></pagingcontrols>
-            </datagrid>
+        <div>
+            <datagrid id="posts" repeat="row in posts1 track by $index" on-complete-render="serverRepeatRendered()" on-index-changed="onCurrentPageChangedServer1(event)"  >
+                <div style="" >
+                    Second Grid
+                    i-scrollable  scroll-height="150" on-scroll-end="outerScrollEnd(e)" scroller-key="rep1" refresh-scroll="refreshOuterScroll1" 
+                    <pagingcontrols page-size="1"></pagingcontrols>
+                    <itemtemplate paging-mode="server"> 
+            -->
+                       <div i-scrollable apply-scroll-promise="applyInnerScrollPromise"  scroll-height="70" scroller-key="{{row.id}}1" refresh-scroll="refreshInnerScroll1"  on-scroll-end="innerScrollEnd(e)"   >
+                           
+                            <div testdirective style="background:green;width:200px; "> -->> POST{{row.id}} {{row.title}}</div>
+                        </div> 
+                        
+                    <hr style="width:500px;">
+
+                </itemtemplate>
+
+
         </div>
 
+        </datagrid>
     </div>
 
+     
 
+    <div>
+        <div id="wrapperpp">
+            <div id="scroller">
+                <ul>
+                    <li>Pretty row 1</li>
+                    <li>Pretty row 2</li>
+                    <li>Pretty row 3</li>
+                    <li>Pretty row 4</li>
+                    <li>Pretty row 5</li>
+                    <li>Pretty row 6</li>
+                    <li>Pretty row 7</li>
+                    <li>Pretty row 8</li>
+                    <li>Pretty row 9</li>
+                    <li>Pretty row 10</li>
+                    <li>Pretty row 11</li>
+                    <li>Pretty row 12</li>
+                    <li>Pretty row 13</li>
+                    <li>Pretty row 14</li>
+                    <li>Pretty row 15</li>
+                    <li>Pretty row 16</li>
+                    <li>Pretty row 17</li>
+                    <li>Pretty row 18</li>
+                    <li>Pretty row 19</li>
+                    <li>Pretty row 20</li>
+                    <li>Pretty row 21</li>
+                    <li>Pretty row 22</li>
+                    <li>Pretty row 23</li>
+                    <li>Pretty row 24</li>
+                    <li>Pretty row 25</li>
+                    <li>Pretty row 26</li>
+                    <li>Pretty row 27</li>
+                    <li>Pretty row 28</li>
+                    <li>Pretty row 29</li>
+                    <li>Pretty row 30</li>
+                    <li>Pretty row 31</li>
+                    <li>Pretty row 32</li>
+                    <li>Pretty row 33</li>
+                    <li>Pretty row 34</li>
+                    <li>Pretty row 35</li>
+                    <li>Pretty row 36</li>
+                    <li>Pretty row 37</li>
+                    <li>Pretty row 38</li>
+                    <li>Pretty row 39</li>
+                    <li>Pretty row 40</li>
+                    <li>Pretty row 41</li>
+                    <li>Pretty row 42</li>
+                    <li>Pretty row 43</li>
+                    <li>Pretty row 44</li>
+                    <li>Pretty row 45</li>
+                    <li>Pretty row 46</li>
+                    <li>Pretty row 47</li>
+                    <li>Pretty row 48</li>
+                    <li>Pretty row 49</li>
+                    <li>Pretty row 50</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <style type="text/css">
+        #wrapperpp, #wrapperpp111 {
+            height: 200px;
+            width: auto;
+            /*max-height:200px;*/
+            background: pink;
+            position: relative;
+            overflow: hidden;
+        }
+        
+         #scroller {
+            position: absolute;
+            -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+            padding: 0;
+        }
+    </style>
+    <script>
+        $(document).ready(function(argument) {
+            // body...
+            // alert('loaded');
+            var myScroll = new IScroll('#wrapperpp', {
+                bounce: true,
+                momentum: true,
+                scrollbars: true,
+                click: true,
+                // snap: ".item",
+                mouseWheel: true,
+                interactiveScrollbars: true
+            });
+
+            myScroll.refresh();
+
+        });
+    </script>
 </body>
+
 
 </html>

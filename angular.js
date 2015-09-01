@@ -12939,7 +12939,7 @@ function qFactory(nextTick, exceptionHandler) {
   }
 
   Deferred.prototype = {
-    resolve: function(val) {
+    resolve: function(val) { 
       if (this.promise.$$state.status) return;
       if (val === this.promise) {
         this.$$reject($qMinErr(

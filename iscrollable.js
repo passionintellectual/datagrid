@@ -5,9 +5,10 @@
  * Created by nemade_g on 07-07-2015.
  */
 angular.module('gtpWebApp.core')
-  .directive('iScrollable', ['$timeout', '$parse', function($timeout, $parse) {
+  .directive('iScrollable', ['$timeout', '$parse', '$gq', function($timeout, $parse, $gq) {
     return {
       restrict: 'AE',
+      priority: 1500,
       //   transclude:true,
       //   scope:{
 
@@ -17,101 +18,171 @@ angular.module('gtpWebApp.core')
       //   },
       // scope:true,
       template: '',
-      priority: 1500,
-      link: function(scope, element, attrs) {
-        console.log('iScrollable scope', scope);
+      //require:'iscrollerCntrl',
+      compile: function() {
 
-        $timeout(function() {
-          if (!element.attr('scroller-key')) {
-            return;
-          }
-          var scrollerKey = "scroller-wrapper-" + element.attr('scroller-key');
-          element.addClass(scrollerKey);
-          if (!scrollerKey) {
-            console.error('Element should have unique Id to apply iscroll.');
-          }
-          scope[scrollerKey] = scope[scrollerKey] || {};
+        return {
+          post: function(scope, element, attrs) {
+              //if($(element).attr('attained') != 'true'){
+              //    $(element).attr('attained', 'true');
+              //    return;
+              //}
 
-
-          var height = attrs.scrollHeight;
-          scope[scrollerKey].height = height;
-
-          // console.log('iscrollable ',scope);
-          var scroller = $(element)
-            .wrap('<div style="position:relative;overflow:hidden;height:' + height + 'px;" id="' + scrollerKey + '" > </div>')
-            .wrap('<div id="scroller"> </div>');
-          if ($('#' + scrollerKey).length > 0) {
-            scope[scrollerKey].scroll = new IScroll('#' + scrollerKey  , {
-              bounce: true,
-              momentum: true,
-              scrollbars: true,
-              click: true,
-              // snap: ".item",
-              mouseWheel: true,
-              interactiveScrollbars: true
-                // startY:  $scope.supplierTabScrollPosn[$scope.currentTab] || 0
-            });
-
-            scope[scrollerKey].scroll.on('scrollEnd', function(e) {
-              var et = this;
-              et.scrollerKey = scrollerKey;
-              var data = {
-                e: et,
-
-              };
-
-              if (attrs.onScrollEnd) {
-                $parse(attrs.onScrollEnd)(scope, data);
+              var scrollerKey;
+              var timeOffset = 0;
+              if (!element.attr('scroller-key')) {
+                return;
               }
-            });
 
-          }
-
-          function refreshScroll(scrollerKey) {
-            // body...
-            $timeout(function() {
-
-              if (scope[scrollerKey].scroll) {
-                scope[scrollerKey].scroll.refresh();
+              function createScrollerKey() {
+                return "scroller-wrapper-" + scope.$eval(element.attr('scroller-key'));
               }
-            }, 50);
 
-          }
-          scope.$watch(function() {
-            return element.attr('scroll-height');
-          }, function(val) {
+              function queueToScrollInitialised(fn) {
+                if (scrollerKey && scope[scrollerKey] && scope[scrollerKey].scrollInitialised) {
+                  scope[scrollerKey].scrollInitialised.then(fn);
+                }
+                else {
+                  var e = new Error('dummy');
+                  var stack = e.stack.replace(/^[^\(]+?[\n$]/gm, '')
+                    .replace(/^\s+at\s+/gm, '')
+                    .replace(/^Object.<anonymous>\s*\(/gm, '{anonymous}()@')
+                    .split('\n');
+                  console.log(stack);
+                }
+              }
+              var applyScrollPromise;
+              if (attrs.applyScrollPromise) {
+                applyScrollPromise = $parse(attrs.applyScrollPromise)(scope).promise;
+              }
 
-
-            angular.element('#' + scrollerKey).height(val);
-            refreshScroll(scrollerKey);
-
-          })
-
-          scope.$watch(attrs.refreshScroll, function(val) {
-            // body...
-            if (val) {
-              angular.element('#' + scrollerKey).height(9);
-            }
-            else {
-              angular.element('#' + scrollerKey).height(90);
-            }
-
-            refreshScroll(scrollerKey);
-
-          })
-
-
-        });
+              function scrollInit(scrollerKey) {
 
 
 
 
+                // storing initial height in scope.
+                var height = attrs.scrollHeight;
+                scope[scrollerKey].height = height;
+
+                //           var el = $(element).wrap('<div style="position:relative;height:' + height + 'px;overflow:hidden;" id="wrapperpp111" ><div id="scroller" style="position:absolute;"  > </div> </div>')
+                //scroller.wrap('<div id="scroller" style="position:absolute;overflow:hidden;"  > </div>');
+                var tempEl = $(element).wrap('<div id="scroller" style="position:absolute;"  > </div> ').parent();
+
+                var el = $(tempEl).wrap('<div style="position:relative;height:' + height + 'px;overflow:hidden;"' + 'id="' + scrollerKey + '" ></div>').parent();
+                console.log('el', el);
+
+                scope[scrollerKey].scroll = new IScroll(el[0], {
+                  bounce: true,
+                  momentum: true,
+                  scrollbars: true,
+                  click: true,
+
+                  mouseWheel: true,
+                   interactiveScrollbars: true,
+                   startY:  0
+                });
+
+                scope[scrollerKey].scrollInitialised.resolve();
+
+                applyScrollPromise = undefined;
+
+              } //End of scrollInit.
 
 
+              $timeout(function() {
 
+
+                scrollerKey = createScrollerKey();
+                element.addClass(scrollerKey);
+                if (!scrollerKey) {
+                  console.error('Element should have unique Id to apply iscroll.');
+                }
+                scope[scrollerKey] = scope[scrollerKey] || {};
+                scope[scrollerKey].scrollInitialised = new $gq();
+                if (applyScrollPromise && applyScrollPromise.then) {
+                  applyScrollPromise.then(function(r) {
+
+
+                    scrollInit(scrollerKey);
+
+                  })
+                }
+                else {
+                  scrollInit(scrollerKey);
+                }
+                queueToScrollInitialised(function(result) {
+                  if (scope[scrollerKey] && scope[scrollerKey].scroll) {
+                    scope[scrollerKey].scroll.refresh();
+                  }
+                })
+
+
+              }, timeOffset);
+
+              //   scope[scrollerKey].scroll.on('scrollEnd', function(e) {
+              //     var et = this;
+              //     et.scrollerKey = scrollerKey;
+              //     var data = {
+              //       e: et,
+
+              //     };
+
+              //     if (attrs.onScrollEnd) {
+              //       $parse(attrs.onScrollEnd)(scope, data);
+              //     }
+              //   });
+
+              // }
+
+              function refreshScroll(scrollerKey) {
+                // body...
+                $timeout(function() {
+
+                  if (scope[scrollerKey].scroll) {
+                    scope[scrollerKey].scroll.refresh();
+                  }
+                }, +timeOffset + 50);
+
+              }
+
+
+              scope.$watch(function() {
+                return element.attr('scroll-height');
+              }, function(val) {
+                $timeout(function() {
+                  queueToScrollInitialised(function(r) {
+
+                    angular.element('#' + scrollerKey).height(val);
+                    refreshScroll(scrollerKey);
+
+                  }); //promise end
+                }, +timeOffset + 50); // timeout end
+              })
+
+              scope.$watch(attrs.refreshScroll, function(val) {
+                // body...
+                // if (val) {
+                //   angular.element('#' + scrollerKey).height(9);
+                // }
+                // else {
+                //   angular.element('#' + scrollerKey).height(90);
+                // }
+                $timeout(function() {
+                  queueToScrollInitialised(function(argument) {
+                    // body...
+                    refreshScroll(scrollerKey);
+                  })
+                }, +timeOffset + 50);
+
+
+              });
+            } // end of pre function
+            //  } ///End of If to check if scrollable element is there 
+        }; //return function
       },
       controller: 'iscrollerCntrl'
-    }
+    }; //RETURNING FUNCTION FOR ENTIRE DIRECTIVE.
   }]).controller('iscrollerCntrl', ['$scope', function($scope) {
     console.log('controller of iscrollable', this);
 

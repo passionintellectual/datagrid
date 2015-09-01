@@ -3,10 +3,10 @@ angular.module('gtpWebApp.core')
         return {
             restrict: 'EA',
             transclude: true,
-             scope:true,
+             //scope:true,
             template: '<div class="gridContainer {{gridClass}}"><element-spinner blocked="blocked"><div  class="content"  ><ng-transclude></ng-transclude></div></element-spinner> </div>',
             // template: '<div class="gridContainer {{gridClass}}"><div  class="content"  ><ng-transclude></ng-transclude></div> </div>',
-            priority: 920,
+            priority: 1920,
             link: {
                 pre: function preLink(scope, element, attrs, controller, transclude) {
                     if (attrs.onIndexChanged) {

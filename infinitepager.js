@@ -2,7 +2,7 @@ angular.module('gtpWebApp.core')
     .directive('infinitepager', ['$compile', '$timeout', '$parse', 'pagingService', 'guidService', function($compile, $timeout, $parse, pagingService, guidService) {
         return {
             restrict: 'AEC',
-            priority: 913,
+            priority: 1010,
             require: '^datagrid',
             template: '',
             link: {
@@ -13,7 +13,7 @@ angular.module('gtpWebApp.core')
 
                     scope.repeatExpression = controller.repeatExpression.replace(controller.repeatAttrs.rhs, ' filtered = (' + controller.repeatAttrs.rhs + ') | myLimitTo:dgEnd:dgStart ');
 
-
+console.log('infinite pager ', scope);
 
                     scope.onIndexChanged = $parse(controller.onIndexChanged);
 
@@ -28,15 +28,83 @@ angular.module('gtpWebApp.core')
 
                     scope.$watchCollection(controller.repeatAttrs.rhs, function(collection) {
                         if (collection) {
-                            // scope.paging.collectionLength = collection.length;
-                            if (scope.pagingMode != 'server') {
-                                scope.paging.setCollectionLength(collection.length);
+
+                            if (scope.pagingMode == 'server') {
+                                scope.paging.setCollectionLength(collection.collectionLength);
+                            }
+                            else {
+                                scope.paging.collectionLength = collection.length;
                             }
                         }
                     });
                     scope.block = controller.block;
                     scope.unBlock = controller.unBlock;
 
+
+                    scope.onCurrentPageChanged = function(eventWrapper) {
+                        var event = eventWrapper.info || eventWrapper;
+                        //console.log('$scope.paging.currentPage', $scope.paging.currentPage);
+                        //console.log('info onCurrentPageChanged received--> $currentPage', event);
+                        //$scope.dgEnd += 1; //$scope.paging.pageSize;
+                        // if (!$scope.$$phase) $scope.$apply();
+
+
+                        switch (scope.pagingMode) {
+                            case 'normal':
+                                if (scope.collectionLength > event.extent.start) {
+                                    scope.dgStart = event.extent.start;
+
+
+                                }
+                                break;
+                            case 'infinite':
+                                if (scope.collectionLength >= event.extent.end) {
+                                    scope.dgEnd = event.extent.end;
+                                }
+                                break;
+                            case 'server':
+                                scope.block();
+
+                                if (scope.onIndexChanged) {
+                                  
+                                        var prms = scope.onIndexChanged(scope, {
+                                        event: event
+                                    })
+                                   
+                                    if (prms && prms.then) {
+                                        prms.then(function(res) {
+                                            scope.paging.collectionLength = res.collectionLength; //res.length;
+                                            scope.dgEnd = res.collectionLength;
+                                            scope.dgStart = 0;
+                                            scope.unBlock();
+                                        });
+                                    }
+                                }
+                                break;
+
+                            default:
+                                if (scope.collectionLength > event.extent.start) {
+                                    scope.dgStart = event.extent.start;
+                                }
+                                // code
+                        }
+                        //$scope.dgEnd = event.extent.end;
+                    }
+
+                    scope.onPageSizeChanged = function(pageSize) {
+
+
+                        scope.dgStart = 0; //$scope.paging.pageSize;
+                        scope.dgEnd = scope.paging.pageSize;
+                        // if (!$scope.$$phase) $scope.$apply();
+                    }
+
+                    scope.paging.currentPageChanged.then(function(result) {
+                        scope.onCurrentPageChanged(result);
+                    })
+                    scope.paging.goTo(0);
+                    if (!scope.paging.pageSize)
+                        scope.paging.setSize(1);
 
                 },
                 post: function postLink(scope, element, attrs, controller, transclude) {
@@ -49,70 +117,14 @@ angular.module('gtpWebApp.core')
             controller: ['$scope', function($scope) {
                 //console.log('infinite Pager controller--> $scope', $scope);
 
-                $scope.onCurrentPageChanged = function(eventWrapper) {
-                    var event = eventWrapper.event || eventWrapper;
-                    //console.log('$scope.paging.currentPage', $scope.paging.currentPage);
-                    //console.log('info onCurrentPageChanged received--> $currentPage', event);
-                    //$scope.dgEnd += 1; //$scope.paging.pageSize;
-                    // if (!$scope.$$phase) $scope.$apply();
-
-
-                    switch ($scope.pagingMode) {
-                        case 'normal':
-                            if ($scope.collectionLength > event.extent.start) {
-                                $scope.dgStart = event.extent.start;
-
-
-                            }
-                            break;
-                        case 'infinite':
-                            if ($scope.collectionLength >= event.extent.end) {
-                                $scope.dgEnd = event.extent.end;
-                            }
-                            break;
-                        case 'server':
-                            $scope.block();
-
-                            if ($scope.onIndexChanged) {
-                                var prms = $scope.onIndexChanged($scope, {
-                                    event: event
-                                });
-                                if (prms && prms.then) {
-                                    prms.then(function(res) {
-                                        $scope.paging.collectionLength = res.collectionLength; //res.length;
-                                        $scope.dgEnd = res.collectionLength;
-                                        $scope.dgStart = 0;
-                                        $scope.unBlock();
-                                    });
-                                }
-                            }
-                            break;
-
-                        default:
-                            if ($scope.collectionLength > event.extent.start) {
-                                $scope.dgStart = event.extent.start;
-                            }
-                            // code
-                    }
-                    //$scope.dgEnd = event.extent.end;
-                }
-
-                $scope.onPageSizeChanged = function(pageSize) {
-
-
-                    $scope.dgStart = 0; //$scope.paging.pageSize;
-                    $scope.dgEnd = $scope.paging.pageSize;
-                    // if (!$scope.$$phase) $scope.$apply();
-                }
-
 
 
                 // $scope.$watch(function() {
-                //   return $scope.paging.currentPage;
+                //     return $scope.paging.currentPage;
                 // }, function(newValue, oldValue) {
-                //   if (newValue && newValue != oldValue) {
-                //     $scope.dgEnd += 1;
-                //   }
+                //     //if (newValue && newValue != oldValue) {
+                //         $scope.onCurrentPageChanged($scope.paging.pageChangeEvent);
+                //     // }
 
                 // }, true);
 

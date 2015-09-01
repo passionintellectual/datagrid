@@ -1,5 +1,5 @@
 angular.module('gtpWebApp.core')
-    .directive('pagingcontrols', ['$compile','$timeout', '$parse', 'pagingService', 'guidService', function($compile, $timeout, $parse, pagingService, guidService) {
+    .directive('pagingcontrols', ['$compile', '$timeout', '$parse', 'pagingService', 'guidService', function($compile, $timeout, $parse, pagingService, guidService) {
         return {
             restrict: 'AE',
             transclude: true,
@@ -13,9 +13,9 @@ angular.module('gtpWebApp.core')
                 onSizeChanged: '&'
             },
             compile: function(scope, tElem, tAttrs) {
-                
-                            //  angular.element(  element).attrs( 'on-index-changed', 'onCurrentPageChanged(currentPage)');
-                  
+
+                //  angular.element(  element).attrs( 'on-index-changed', 'onCurrentPageChanged(currentPage)');
+
                 return {
                     pre: function(scope, element, attrs) {
                         console.log('paging pre function scope', scope);
@@ -25,20 +25,32 @@ angular.module('gtpWebApp.core')
                         console.log('uniqueKey at paging direcitve', uniqueKey);
                         element.attr('uniquekey', uniqueKey);
                         scope.paging = new pagingService(uniqueKey);
-                                
-                    // $(element).attr('on-index-changed', 'onCurrentPageChanged(currentPage)');
-                    //   $compile(element)(scope);
-                    if(!attrs.onIndexChanged){
-                       scope.onIndexChanged = scope.$parent.onCurrentPageChanged;
-                    }
+
+                        // $(element).attr('on-index-changed', 'onCurrentPageChanged(currentPage)');
+                        //   $compile(element)(scope);
+
                         if (attrs.pageSize) {
-                            $timeout(function() {
 
-                                //scope.paging.pageSize = attrs.pageSize;
-                                scope.paging.setSize(+attrs.pageSize);
 
-                            });
+                            //scope.paging.pageSize = attrs.pageSize;
+                            scope.paging.setSize(+attrs.pageSize);
+
+
                         }
+                        scope.goNext = function() {
+                            scope.paging.goNext();
+                        }
+                        scope.goBack = function() {
+                            scope.paging.goBack();
+                        };
+
+                        scope.paging.pageSizeChanged.then(function (result) {
+                            if (scope.onSizeChanged) {
+                                    scope.onSizeChanged( result);
+                                }
+                        })
+                         
+
 
                         //
                         //$timeout(function(){
@@ -58,51 +70,7 @@ angular.module('gtpWebApp.core')
             controller: 'pagingCntrl'
         }
     }]).controller('pagingCntrl', ['$timeout', '$scope', 'pagingService', function($timeout, $scope, pagingService) {
-        console.log('pagingcontroller', $scope);
-        $scope.goNext = function() {
-            $scope.paging.goNext();
-        }
-        $scope.goBack = function() {
-            $scope.paging.goBack();
-        };
-        $scope.$watch('paging.currentPage', function(newVal, oldVal) {
-            if (newVal != oldVal) {
-                //console.log('current page size is changed.' + newVal);
-                if ($scope.onIndexChanged) {
-                    var object = {
-                        start: 0,
-                        end: $scope.paging.pageSize
-                    };
-                    object.start = $scope.paging.pageSize * ($scope.paging.currentPage);
-                    object.end = object.start + $scope.paging.pageSize;
-                    
-                    $scope.onIndexChanged.apply($scope, [{
-                        event:{
-                            newCurrentPage: newVal,
-                            oldCurrentPage: oldVal,
-                            extent: object,
-                            pageSize: $scope.paging.pageSize
-                        }
-                    }])
-                    
-                }
-            }
-        });
 
 
-        $scope.$watch(function() {
-            return $scope.paging.pageSize;
-        }, function(newVal, oldVal) {
-            if (newVal != oldVal) {
-                console.log('  pageSize is changed.' + newVal);
-                if ($scope.onSizeChanged) {
-                    $scope.onSizeChanged({
-                        currentPage: {
-                            newPageSize: newVal,
-                            oldPageSize: oldVal
-                        }
-                    });
-                }
-            }
-        });
+
     }]);

@@ -1,8 +1,8 @@
 // Code goes here
 angular.module("gtpWebApp.core", ['ngResource']);
 angular.module('gtpWebApp.core').controller('dg', ['$scope', '$timeout',
-    'pagingService', 'PostRepository',
-    function($scope, $timeout, pagingService, PostRepository) {
+    'pagingService', 'PostRepository', '$gq','$q',
+    function($scope, $timeout, pagingService, PostRepository, $gq, $q) {
 
         $scope.model = {};
         $scope.managers = [{
@@ -88,7 +88,7 @@ angular.module('gtpWebApp.core').controller('dg', ['$scope', '$timeout',
             }).$promise;
 
         }
-
+$scope.applyInnerScrollPromise = $q.defer();
 $scope.onCurrentPageChangedServer1 = function(event) {
 
             var start = event.newCurrentPage * event.pageSize;
@@ -117,7 +117,7 @@ $scope.onCurrentPageChangedServer1 = function(event) {
                     //   }
                     var temp1 = temp.join('--');
                     console.log('temp', temp);
-                    res[1].title = temp1;
+                    res[0].title = temp1 + temp1 + temp1+ temp1;
                 }
                 res.collectionLength = 100;
                 $scope.posts1 = res;
@@ -125,21 +125,31 @@ $scope.onCurrentPageChangedServer1 = function(event) {
 
         }
         
-        function dot() {
-            // body...
-            $timeout(function() {
+        // function dot() {
+        //     // body...
+        //     $timeout(function() {
 
-                //  angular.element('#rep').attr('scroll-height', 90);
-                //   if (!$scope.$$phase) $scope.$apply()
-                $scope.refreshOuterScroll = !!!$scope.refreshOuterScroll;
-                //angular.element('#rep').attr('scroll-height', 90);
+        //         //  angular.element('#rep').attr('scroll-height', 90);
+        //         //   if (!$scope.$$phase) $scope.$apply()
+        //         $scope.refreshOuterScroll = !!!$scope.refreshOuterScroll;
+        //         //angular.element('#rep').attr('scroll-height', 90);
 
-                // dot();
+        //         // dot();
 
-            }, 2000);
+        //     }, 2000);
+        // }
+
+        // dot();
+        
+        $scope.ondatalistrenderfinished1 = function ondatalistRender(argument) {
+            $scope.refreshInnerScroll1 = 200 ; 
+            $scope.refreshOuterScroll1 = 300 ; 
+            
         }
-
-        dot();
+        $scope.serverRepeatRendered = function  ( ) {
+            // body...
+            $scope.applyInnerScrollPromise.resolve();
+        }
         $scope.outerScrollEnd = function(e) {
             console.log('outer scroll end', e);
         }
