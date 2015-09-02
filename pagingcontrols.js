@@ -28,7 +28,11 @@ angular.module('gtpWebApp.core')
 
                         // $(element).attr('on-index-changed', 'onCurrentPageChanged(currentPage)');
                         //   $compile(element)(scope);
-
+                        scope.paging.pageSizeChanged.then(function (result) {
+                            if (scope.onSizeChanged) {
+                                    scope.onSizeChanged( result);
+                                }
+                        })
                         if (attrs.pageSize) {
 
 
@@ -44,11 +48,7 @@ angular.module('gtpWebApp.core')
                             scope.paging.goBack();
                         };
 
-                        scope.paging.pageSizeChanged.then(function (result) {
-                            if (scope.onSizeChanged) {
-                                    scope.onSizeChanged( result);
-                                }
-                        })
+                      
                          
 
 

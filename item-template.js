@@ -9,7 +9,7 @@ angular.module('gtpWebApp.core')
          //   template: '<div class="itemdetails  " >  </div>',
            compile:function(element, attrs){
                var tempElement = angular.element('<div class="itemdetails"></div>');
-               tempElement.attr('infinitepager','');
+               tempElement.attr('pager','');
                tempElement.attr('testdirective', '');
                tempElement.attr('paging-mode', attrs.pagingMode || 'infinite');
 
@@ -17,24 +17,27 @@ angular.module('gtpWebApp.core')
 
 
                var transcludeHtml = $(element).html();
-               $(tempElement).html('<div class="ngRContent">' + transcludeHtml + '</div>');
-               var ngrElement = $(tempElement).find('.ngRContent').first();
+                var transcludeElement = angular.element('<div class="ngRContent"></div>');
+               $(transcludeElement).html(   transcludeHtml);
+              
 
-               ngrElement.attr('ng-repeat-events', '');
-               ngrElement.attr('oncompleterender', "onNgRepeatCompleteRendering()");
+               transcludeElement.attr('ng-repeat-events', '');
+               transcludeElement.attr('oncompleterender', "onNgRepeatCompleteRendering()");
                 element.html('');
 
 
                var link ={
 
                        pre: function preLink(scope, element, attrs, controller, transclude) {
-
+                        element.append(tempElement)
+                        $compile(tempElement)(scope);
                        },
                        post: function postLink(scope, element, attrs, controller, transclude) {
-                           element.append(tempElement);
-
+                           //element.find('.itemdetails').first().append(tempElement);
+                           element.append(transcludeElement)
+                            var ngrElement = element.find('.ngRContent');
                            var expression = scope.repeatExpression || controller.repeatExpression;
-                           element.find('.ngRContent').attr('ng-repeat', expression);
+                           ngrElement.attr('ng-repeat', expression);
                            scope.onCompleteRender = $parse(controller.onCompleteRender);
 
 
@@ -55,7 +58,7 @@ angular.module('gtpWebApp.core')
                            //}); // end of transclude function
 
                            console.log('scope in itemtemplate', scope);
-                           $compile($(tempElement))(scope);
+                           $compile(ngrElement)(scope);
                        }
                    };
 

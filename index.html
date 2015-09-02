@@ -16,7 +16,7 @@
     <script src="paging-service.js"></script>
     <script src="my-limit-to.js"></script>
     <script src="data-list.js"></script>
-    <script src="infinitepager.js"></script>
+    <script src="pager.js"></script>
     <script src="item-template.js"></script>
     <script src="pagingcontrols.js"></script>
     <script src="my-limit-to.js"></script>
@@ -31,40 +31,41 @@
 <body ng-app="gtpWebApp.core">
     <div ng-controller="dg">
         <div> {{dgStart}} --- {{dgEnd}} </div>
-        <element-spinner blocked="blocked"></element-spinner>
+         
         <input type="text" ng-model="filterText" />
-        <!--   <datagrid repeat="row in members| filter:{name:filterText} track by $index" class="itemdetails">
+           <datagrid repeat="row in members| filter:{name:filterText} track by $index" class="itemdetails">
+               <pagingcontrols page-size="1"  ></pagingcontrols>
 <itemtemplate paging-mode="normal">
-  <span>Ganesh  {{row.name}}: {{row|json}}</span>
+  <span testdirective>Ganesh  {{row.name}}: {{row|json}}</span>
 </itemtemplate>
-<pagingcontrols page-size="1"  ></pagingcontrols>
-</datagrid>  -->
+
+</datagrid>  
         <hr />
-        <!--<datagrid repeat="row in managers">-->
-        <!--  <itemtemplate paging-mode="normal">-->
-        <!--    <span class="itemTemplate">Manager  {{row.name}}: {{row|json}}</span>-->
-        <!--  </itemtemplate>-->
-        <!--  <pagingcontrols page-size="2"></pagingcontrols>-->
-        <!--</datagrid>-->
+        <datagrid repeat="row in managers">
+          <itemtemplate paging-mode="normal">
+            <span class="itemTemplate">Manager  {{row.name}}: {{row|json}}</span>
+          </itemtemplate>
+          <pagingcontrols page-size="2"></pagingcontrols>
+        </datagrid>
 
         <hr>
 
-        <!--<div> -->
-        <!--    <datagrid id="posts" repeat="row in posts track by $index"  on-index-changed="onCurrentPageChangedServer(event)" on-complete-render="ondatalistrenderfinished(e)">-->
-        <!--        <div style="background:lightgray;color:black;">-->
-        <!--          First Grid-->
-        <!--                <itemtemplate   i-scrollable scroll-height="50"  on-scroll-end="outerScrollEnd(e)" scroller-key="rep" paging-mode="server">-->
+        <div> 
+            <datagrid id="posts" repeat="row in posts track by $index"  on-index-changed="onCurrentPageChangedServer(event)" on-complete-render="ondatalistrenderfinished(e)">
+                <div style="background:lightgray;color:black;">
+                  First Grid
+                        <itemtemplate   i-scrollable scroll-height="50"  on-scroll-end="outerScrollEnd(e)" scroller-key="rep" paging-mode="server">
 
-        <!--                    <div   i-scrollable scroll-height="10" scroller-key="{{row.id}}"    on-scroll-end="innerScrollEnd(e)"> -- POST{{row.id}} {{row.title}}</div>-->
-        <!--                    <hr style="width:500px;">-->
+                            <div   i-scrollable scroll-height="10" scroller-key="{{row.id}}"    on-scroll-end="innerScrollEnd(e)"> -- POST{{row.id}} {{row.title}}</div>
+                            <hr style="width:500px;">
 
-        <!--                </itemtemplate>-->
+                        </itemtemplate>
 
 
-        <!--        </div>-->
-        <!--        <pagingcontrols page-size="10"></pagingcontrols>-->
-        <!--    </datagrid>-->
-        <!--</div>-->
+                </div>
+                <pagingcontrols page-size="10"></pagingcontrols>
+            </datagrid>
+        </div>
         <hr>
         <div>
             <datagrid id="posts" repeat="row in posts1 track by $index" on-complete-render="serverRepeatRendered()" on-index-changed="onCurrentPageChangedServer1(event)"  >

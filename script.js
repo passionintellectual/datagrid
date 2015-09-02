@@ -81,7 +81,7 @@ angular.module('gtpWebApp.core').controller('dg', ['$scope', '$timeout',
                     //   }
                     var temp1 = temp.join('--');
                     console.log('temp', temp);
-                    res[1].title = temp1;
+                    //res[1].title = temp1;
                 }
                 res.collectionLength = 100;
                 $scope.posts = res;
@@ -117,7 +117,7 @@ $scope.onCurrentPageChangedServer1 = function(event) {
                     //   }
                     var temp1 = temp.join('--');
                     console.log('temp', temp);
-                    res[0].title = temp1 + temp1 + temp1+ temp1;
+                   // res[0].title = temp1 + temp1 + temp1+ temp1;
                 }
                 res.collectionLength = 100;
                 $scope.posts1 = res;
