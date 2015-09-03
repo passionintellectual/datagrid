@@ -4,7 +4,7 @@ angular.module('gtpWebApp.core')
             restrict: 'AEC',
             priority: 1010,
             require: '^datagrid',
-            template: '',
+            template: '<div class="pagerimpl" ></div>',
             link: {
                 pre: function preLink(scope, element, attrs, controller, transclude) {
 
@@ -20,6 +20,17 @@ angular.module('gtpWebApp.core')
                     scope.pagingMode = attrs.pagingMode;
 
                     scope.paging = new pagingService(controller.pagingUniqueKey);
+                    
+                    if(attrs.pageSize){
+                        scope.paging.setSize(+attrs.pageSize);
+                         scope.paging.pageSizeChanged.then(function (result) {
+                            if (scope.onSizeChanged) {
+                                    scope.onSizeChanged( result);
+                                }
+                        })
+                        
+                    }
+                   
                     scope.collection = $parse(controller.repeatAttrs.rhs)(scope);
                     if (scope.collection) {
                         scope.collectionLength = scope.collection.length;

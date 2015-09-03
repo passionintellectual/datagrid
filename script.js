@@ -119,8 +119,22 @@ $scope.onCurrentPageChangedServer1 = function(event) {
                     console.log('temp', temp);
                    // res[0].title = temp1 + temp1 + temp1+ temp1;
                 }
+                
+                // res.collectionLength = 100;
+                $scope.posts1 =  $scope.posts1 || [] ;
+                if($scope.posts1 && $scope.posts1.collectionLength)
+                delete $scope.posts1.collectionLength;
+                var arr = angular.copy($scope.posts1);
+                res.forEach(function(item, index){
+                    
+                    arr.push(item);
+                })
+                arr.collectionLength = 100;
+               
                 res.collectionLength = 100;
-                $scope.posts1 = res;
+                $scope.posts1 = arr;
+               
+                console.log('scope post1 after pushing', $scope.posts1);
             }).$promise;
 
         }

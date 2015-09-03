@@ -29,13 +29,18 @@ angular.module('gtpWebApp.core')
               //}
 
               var scrollerKey;
-              var timeOffset = 0;
+              var timeOffset = parseInt($(element).attr('scroller-timeout')) || 0;
               if (!element.attr('scroller-key')) {
                 return;
               }
 
               function createScrollerKey() {
-                return "scroller-wrapper-" + scope.$eval(element.attr('scroller-key'));
+                var atr = element.attr('scroller-key');
+                var val = scope.$eval(atr);
+                if (!val) {
+                  val = atr;
+                }
+                return "scroller-wrapper-" + val;
               }
 
               function queueToScrollInitialised(fn) {
@@ -79,8 +84,8 @@ angular.module('gtpWebApp.core')
                   click: true,
 
                   mouseWheel: true,
-                   interactiveScrollbars: true,
-                   startY:  0
+                  interactiveScrollbars: true,
+                  startY: 0
                 });
 
                 scope[scrollerKey].scrollInitialised.resolve();
@@ -114,26 +119,37 @@ angular.module('gtpWebApp.core')
                 queueToScrollInitialised(function(result) {
                   if (scope[scrollerKey] && scope[scrollerKey].scroll) {
                     scope[scrollerKey].scroll.refresh();
+
+                    scope[scrollerKey].scroll.on('scrollEnd', function(e) {
+                      var et = this;
+                      et.scrollerKey = scrollerKey;
+                      var data = {
+                        e: et,
+
+                      };
+
+                      if (attrs.onScrollEnd) {
+                        $parse(attrs.onScrollEnd)(scope, data);
+                      }
+
+                      if (this.y == this.minScrollY) {
+                        $parse(attrs.onScrollUp)(scope, data);
+                      }
+                      if (this.y == this.maxScrollY) {
+                        $parse(attrs.onScrollBottom)(scope, data);
+                      }
+                    });
+
+
                   }
                 })
 
 
+
               }, timeOffset);
 
-              //   scope[scrollerKey].scroll.on('scrollEnd', function(e) {
-              //     var et = this;
-              //     et.scrollerKey = scrollerKey;
-              //     var data = {
-              //       e: et,
 
-              //     };
 
-              //     if (attrs.onScrollEnd) {
-              //       $parse(attrs.onScrollEnd)(scope, data);
-              //     }
-              //   });
-
-              // }
 
               function refreshScroll(scrollerKey) {
                 // body...
@@ -146,6 +162,20 @@ angular.module('gtpWebApp.core')
 
               }
 
+              scope.$watch(function() {
+                return $(element).parent("#scroller").height();
+              }, function(newval, oldval) {
+                if (newval != oldval) {
+                  // $timeout(function() {
+                  //   queueToScrollInitialised(function(r) {
+
+                  //     angular.element('#' + scrollerKey).height(val);
+                      refreshScroll(scrollerKey);
+
+                //    }); //promise end
+                 // }, +timeOffset + 50); // timeout end
+                }
+              })
 
               scope.$watch(function() {
                 return element.attr('scroll-height');
