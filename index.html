@@ -55,7 +55,7 @@
             <datagrid id="posts" repeat="row in posts track by $index"  on-index-changed="onCurrentPageChangedServer(event)" on-complete-render="ondatalistrenderfinished(e)">
                 <div style="background:lightgray;color:black;">
                   First Grid
-                        <itemtemplate   i-scrollable scroll-height="50"  on-scroll-end="outerScrollEnd(e)" scroller-key="rep" paging-mode="server">
+                        <itemtemplate   i-scrollable scroll-height="150"  on-scroll-end="outerScrollEnd(e)" scroller-key="rep" paging-mode="server">
 
                             <div   i-scrollable scroll-height="10" scroller-key="{{row.id}}"    on-scroll-end="innerScrollEnd(e)"> -- POST{{row.id}} {{row.title}}</div>
                             <hr style="width:500px;">
@@ -153,20 +153,20 @@
     <!--    </div>-->
     <!--</div>-->
     <style type="text/css">
-        #wrapperpp, #wrapperpp111 {
-            height: 200px;
-            width: auto;
+        /*#wrapperpp, #wrapperpp111 {*/
+        /*    height: 200px;*/
+        /*    width: auto;*/
             /*max-height:200px;*/
-            background: pink;
-            position: relative;
-            overflow: hidden;
-        }
+        /*    background: pink;*/
+        /*    position: relative;*/
+        /*    overflow: hidden;*/
+        /*}*/
         
-         #scroller {
-            position: absolute;
-            -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-            padding: 0;
-        }
+        /* #scroller {*/
+        /*    position: absolute;*/
+        /*    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);*/
+        /*    padding: 0;*/
+        /*}*/
     </style>
     <script>
         $(document).ready(function(argument) {

@@ -23,7 +23,7 @@ angular.module('gtpWebApp.core')
                     
                     if(attrs.pageSize){
                         scope.paging.setSize(+attrs.pageSize);
-                         scope.paging.pageSizeChanged.then(function (result) {
+                         scope.paging.pageSizeChanged.promise().then(function (result) {
                             if (scope.onSizeChanged) {
                                     scope.onSizeChanged( result);
                                 }
@@ -110,7 +110,7 @@ angular.module('gtpWebApp.core')
                          if (!scope.$$phase) scope.$apply();
                     }
 
-                    scope.paging.currentPageChanged.then(function(result) {
+                    scope.paging.currentPageChanged.promise().then(function(result) {
                         scope.onCurrentPageChanged(result);
                     })
                     scope.paging.goTo(0);

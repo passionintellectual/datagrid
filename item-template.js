@@ -66,7 +66,7 @@ angular.module('gtpWebApp.core')
                     
                     if(attrs.pageSize){
                         scope.paging.setSize(+attrs.pageSize);
-                         scope.paging.pageSizeChanged.then(function (result) {
+                         scope.paging.pageSizeChanged.promise().then(function (result) {
                             if (scope.onSizeChanged) {
                                     scope.onSizeChanged( result);
                                 }

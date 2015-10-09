@@ -6,22 +6,27 @@ angular.module('gtpWebApp.core')
         return {
             restrict: 'A',
             link: function (scope, element, attr) {
-                var onCompleteFn;
-                if(attr['oncompleterender']) {
-                    onCompleteFn = $parse(attr['oncompleterender'])
-                }
-              //scope.$watch('$last', function(newVal, oldVal){
-                if(!!scope.$last){
-                  $timeout(function () {
-                    scope.$apply(function(){
-                      if(onCompleteFn) {
-                        onCompleteFn(scope);
-                      }
+                var processLast = function () {
+                    if (!!scope.$last) {
+                        $timeout(function () {
+                            var onCompleteFn;
+                            if (attr['oncompleterender']) {
+                                onCompleteFn = $parse(attr['oncompleterender'])
+                            }
+                            if (onCompleteFn) {
+                                onCompleteFn(scope);
+                            }
+                        })
+                    }
+                };
 
-                    })
-                  });
+                if(attr.repeatEventsInvoker){
+                    attr.$observe('repeatEventsInvoker', function (newValue, oldValue) {
+                        processLast()
+                    });
                 }
-              //})
+                processLast();
+
             }
         }
     }]);

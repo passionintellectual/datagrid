@@ -75,7 +75,7 @@ angular.module('gtpWebApp.core')
                          if (!scope.$$phase) scope.$apply();
                     }
 
-                    scope.paging.currentPageChanged.then(function(result) {
+                    scope.paging.currentPageChanged.promise().then(function(result) {
                         scope.onCurrentPageChanged(result);
                     })
                     

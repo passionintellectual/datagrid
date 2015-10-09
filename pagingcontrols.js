@@ -28,7 +28,7 @@ angular.module('gtpWebApp.core')
 
                         // $(element).attr('on-index-changed', 'onCurrentPageChanged(currentPage)');
                         //   $compile(element)(scope);
-                        scope.paging.pageSizeChanged.then(function (result) {
+                        scope.paging.pageSizeChanged.promise().then(function (result) {
                             if (scope.onSizeChanged) {
                                     scope.onSizeChanged( result);
                                 }

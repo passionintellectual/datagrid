@@ -45,7 +45,7 @@ angular.module('gtpWebApp.core')
 
               function queueToScrollInitialised(fn) {
                 if (scrollerKey && scope[scrollerKey] && scope[scrollerKey].scrollInitialised) {
-                  scope[scrollerKey].scrollInitialised.then(fn);
+                  scope[scrollerKey].scrollInitialised.promise().then(fn);
                 }
                 else {
                   var e = new Error('dummy');
@@ -127,6 +127,13 @@ angular.module('gtpWebApp.core')
                         e: et,
 
                       };
+
+                      // e.getVisibleElements = function (argument) {
+                      //   var childElements = $(element).children()
+                        
+                      // }
+                      
+
 
                       if (attrs.onScrollEnd) {
                         $parse(attrs.onScrollEnd)(scope, data);
