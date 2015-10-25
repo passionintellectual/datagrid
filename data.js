@@ -1,9 +1,9 @@
- angular.module('gtpWebApp.core').factory( 'PostRepository', [ 'Resource', function( $resource ) {
+ angular.module('WebApp.core').factory( 'PostRepository', [ 'Resource', function( $resource ) {
    return $resource( 'https://jsonplaceholder.typicode.com/posts/:id', { id: '@id' } );
  }]);
    
  
- angular.module('gtpWebApp.core').factory( 'Resource', [ '$resource', function( $resource ) {
+ angular.module('WebApp.core').factory( 'Resource', [ '$resource', function( $resource ) {
    return function( url, params, methods ) {
      var defaults = {
        update: { method: 'put', isArray: false },

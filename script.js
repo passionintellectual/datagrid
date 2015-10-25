@@ -1,6 +1,6 @@
 // Code goes here
-angular.module("gtpWebApp.core", ['ngResource']);
-angular.module('gtpWebApp.core').controller('dg', ['$scope', '$timeout',
+angular.module("WebApp.core", ['ngResource']);
+angular.module('WebApp.core').controller('dg', ['$scope', '$timeout',
     'pagingService', 'PostRepository', '$gq','$q',
     function($scope, $timeout, pagingService, PostRepository, $gq, $q) {
 

@@ -1,4 +1,4 @@
-angular.module('gtpWebApp.core')
+angular.module('WebApp.core')
     .directive('itemtemplate', [ '$compile', '$timeout', '$parse','pagingService','guidService', function ($compile, $timeout, $parse, pagingService, guidService) {
         return {
             restrict: 'E',

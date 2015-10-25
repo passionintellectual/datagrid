@@ -1,4 +1,4 @@
-angular.module('gtpWebApp.core')
+angular.module('WebApp.core')
     .factory('pagingService', ['$timeout', '$parse', '$gq', function($timeout, $parse, $gq) {
         var pagingService = {};
         var paging = function(key, data) {

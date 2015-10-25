@@ -1,4 +1,4 @@
-angular.module('gtpWebApp.core')
+angular.module('WebApp.core')
     .directive('datagrid', ['$timeout', '$parse', '$compile', 'pagingService', 'guidService', function($timeout, $parse, $compile, pagingService, guidService) {
         return {
             restrict: 'EA',

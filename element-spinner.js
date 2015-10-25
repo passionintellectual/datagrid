@@ -4,7 +4,7 @@
 /**
  * Created by nemade_g on 07-07-2015.
  */
-angular.module('gtpWebApp.core')
+angular.module('WebApp.core')
   .directive('elementSpinner', [ '$timeout', '$parse', function ($timeout, $parse) {
     return {
       restrict: 'AE',

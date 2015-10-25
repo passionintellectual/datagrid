@@ -1,7 +1,7 @@
 /**
  * Created by nemade_g on 18-09-2015.
  */
-angular.module('gtpWebApp.core')
+angular.module('WebApp.core')
     .factory('$gq', ['$timeout', '$q', function ($timeout, $q) {
         var $gq = {};
 

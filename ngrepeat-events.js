@@ -1,7 +1,7 @@
 /**
  * Created by nemade_g on 07-07-2015.
  */
-angular.module('gtpWebApp.core')
+angular.module('WebApp.core')
     .directive('ngRepeatEvents', ['$timeout', '$parse', function ($timeout, $parse) {
         return {
             restrict: 'A',

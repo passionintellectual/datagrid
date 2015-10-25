@@ -1,4 +1,4 @@
-angular.module('gtpWebApp.core')
+angular.module('WebApp.core')
     .directive('pager', ['$compile', '$timeout', '$parse', 'pagingService', 'guidService', function($compile, $timeout, $parse, pagingService, guidService) {
         return {
             restrict: 'AEC',

@@ -1,4 +1,4 @@
-angular.module('gtpWebApp.core')
+angular.module('WebApp.core')
     .directive('iscrollpager', ['$compile', '$timeout', '$parse', 'pagingService', '$q', function($compile, $timeout, $parse, pagingService, $q) {
         return {
             restrict: 'AEC',

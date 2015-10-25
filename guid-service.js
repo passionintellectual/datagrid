@@ -1,5 +1,5 @@
 
-angular.module('gtpWebApp.core')
+angular.module('WebApp.core')
     .factory('guidService', [  function () {
         function seed() {
             return (((1+Math.random())*0x10000)|0).toString(16).substring(1);

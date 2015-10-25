@@ -2,7 +2,7 @@
  * Created by nemade_g on 31-08-2015.
  */
 
-angular.module('gtpWebApp.core')
+angular.module('WebApp.core')
     .directive('testdirective', ['$timeout', '$parse', '$gq', function($timeout, $parse, $gq) {
         return {
             restrict: 'AE',
