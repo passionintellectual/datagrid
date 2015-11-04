@@ -67,14 +67,14 @@ angular.module('WebApp.core')
 
 
                 // storing initial height in scope.
-                var height = attrs.scrollHeight;
+                var height = attrs.scrollHeight || "100%";
                 scope[scrollerKey].height = height;
 
                 //           var el = $(element).wrap('<div style="position:relative;height:' + height + 'px;overflow:hidden;" id="wrapperpp111" ><div id="scroller" style="position:absolute;"  > </div> </div>')
                 //scroller.wrap('<div id="scroller" style="position:absolute;overflow:hidden;"  > </div>');
                 var tempEl = $(element).wrap('<div id="scroller" style="position:absolute;"  > </div> ').parent();
 
-                var el = $(tempEl).wrap('<div style="position:relative;height:' + height + 'px;overflow:hidden;"' + 'id="' + scrollerKey + '" ></div>').parent();
+                var el = $(tempEl).wrap('<div style="position:relative;height:' + height + ';overflow:hidden;"' + 'id="' + scrollerKey + '" ></div>').parent();
                 console.log('el', el);
 
                 scope[scrollerKey].scroll = new IScroll(el[0], {
